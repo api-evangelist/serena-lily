@@ -1,0 +1,132 @@
+generated: '2026-08-05'
+method: probed
+source: >-
+  Live HTTP probes of every Serena & Lily host discovered by DNS enumeration and by the
+  site's own rendered navigation, run as STEP 0b of the API Evangelist enrichment pipeline.
+summary: >-
+  Serena & Lily operates real API infrastructure but publishes no machine-readable contract
+  and runs no developer program. The storefront is backed by an AWS AppSync GraphQL
+  endpoint that answers anonymous requests with introspection disabled, and by an Amazon
+  API Gateway host that rejects every unauthenticated path. No OpenAPI, Swagger, GraphQL
+  SDL, AsyncAPI, agent card, MCP endpoint, llms.txt or .well-known document was found.
+
+hosts_discovered:
+- host: www.serenaandlily.com
+  role: storefront (Vercel front end, DataDome bot management)
+  resolves: true
+- host: api.serenaandlily.com
+  role: Amazon API Gateway
+  resolves: true
+- host: catalogs.serenaandlily.com
+  role: digital catalog viewer
+  resolves: true
+- host: linkst.serenaandlily.com
+  role: email link tracking
+  resolves: true
+- host: dd.serenaandlily.com
+  role: DataDome bot-management first-party proxy
+  resolves: true
+nonexistent_hosts:
+  note: NXDOMAIN — no developer-facing subdomain exists.
+  hosts:
+  - developer.serenaandlily.com
+  - developers.serenaandlily.com
+  - docs.serenaandlily.com
+  - graphql.serenaandlily.com
+  - status.serenaandlily.com
+  - trade.serenaandlily.com
+  - shop.serenaandlily.com
+
+graphql:
+  endpoint: https://www.serenaandlily.com/graphql
+  live: true
+  anonymous: true
+  evidence:
+    request: 'POST {"query":"{__typename}"}'
+    response: '{"data":{"__typename":"Query"}}'
+    http_status: 200
+  implementation: AWS AppSync
+  implementation_evidence: >-
+    Response carries x-amzn-appsync-tokensconsumed and x-amzn-errortype:
+    MalformedHttpRequestException.
+  introspection: disabled
+  introspection_evidence: >-
+    Introspection meta-fields are stripped from the schema. A standard introspection query
+    returns HTTP 200 with "Validation error of type FieldUndefined: Field 'queryType' in
+    type '__Schema' is undefined", and likewise for types, directives, mutationType and
+    subscriptionType. __typename still resolves, so the endpoint executes queries — the
+    schema is deliberately not published.
+  sdl_captured: false
+  sdl_captured_reason: >-
+    Introspection is disabled and no SDL is published anywhere. NOT FABRICATED — no schema
+    was inferred or authored on the provider's behalf.
+
+rest:
+  host: https://api.serenaandlily.com
+  implementation: Amazon API Gateway
+  anonymous: false
+  evidence: >-
+    Every path probed (/, /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json,
+    /api-docs, /docs, /redoc, /graphql, /llms.txt, /mcp, /robots.txt and all
+    /.well-known/* paths) returns HTTP 403 with the body
+    {"message":"Missing Authentication Token"}.
+  spec_captured: false
+
+probes:
+  legend: >-
+    status 404 = confirmed absent (the host served its real 404 page). status 403 on
+    www.serenaandlily.com = DataDome bot challenge, i.e. NOT a confirmed absence — the
+    challenge was honored, not evaded. status 403 on api.serenaandlily.com = API Gateway
+    "Missing Authentication Token".
+  confirmed_absent:
+  - {url: 'https://www.serenaandlily.com/openapi.json', status: 404}
+  - {url: 'https://www.serenaandlily.com/swagger.json', status: 404}
+  - {url: 'https://www.serenaandlily.com/api-docs', status: 404}
+  - {url: 'https://www.serenaandlily.com/.well-known/agent-card.json', status: 404}
+  - {url: 'https://www.serenaandlily.com/.well-known/agent.json', status: 404}
+  - {url: 'https://www.serenaandlily.com/.well-known/ai-plugin.json', status: 404}
+  challenged:
+  - {url: 'https://www.serenaandlily.com/llms.txt', status: 403, wall: datadome}
+  - {url: 'https://www.serenaandlily.com/.well-known/security.txt', status: 403, wall: datadome}
+  - {url: 'https://www.serenaandlily.com/.well-known/openid-configuration', status: 403, wall: datadome}
+  - {url: 'https://www.serenaandlily.com/.well-known/oauth-authorization-server', status: 403, wall: datadome}
+  - {url: 'https://www.serenaandlily.com/.well-known/oauth-protected-resource', status: 403, wall: datadome}
+  - {url: 'https://www.serenaandlily.com/.well-known/api-catalog', status: 403, wall: datadome}
+  - {url: 'https://www.serenaandlily.com/mcp', status: 403, wall: datadome}
+  auth_gated:
+  - {url: 'https://api.serenaandlily.com/openapi.json', status: 403}
+  - {url: 'https://api.serenaandlily.com/graphql', status: 403}
+  - {url: 'https://api.serenaandlily.com/.well-known/agent-card.json', status: 403}
+  reachable:
+  - {url: 'https://www.serenaandlily.com/sitemap.xml', status: 200, note: '3 sitemaps, 25 non-product URLs, none developer-facing'}
+  - {url: 'https://www.serenaandlily.com/graphql', status: 200, note: 'anonymous AppSync, introspection disabled'}
+
+a2a:
+  found: false
+  note: >-
+    Both /.well-known/agent-card.json and the legacy /.well-known/agent.json return a clean
+    404 on www.serenaandlily.com. Per pipeline policy NOTHING was written to a2a/ — an agent
+    card may only ever be recorded when the provider actually serves one.
+
+registries_searched:
+  npm: no first-party package
+  pypi: no first-party package (pypi.org/pypi/serenaandlily/json -> 404)
+  github_org:
+    url: https://github.com/serenaandlily
+    status: 200
+    public_repos: 1
+    note: >-
+      The single public repo, dc-extension-rich-text, is a FORK of an Amplience Dynamic
+      Content extension — not a first-party SDK. No packages/ artifact was written.
+
+stack_observed:
+  commerce: Elastic Path
+  cms: Amplience (media endpoint "serenaandlily", cdn.media.amplience.net)
+  frontend: Vercel
+  api_layer: AWS AppSync + Amazon API Gateway
+  cdn: Amazon CloudFront
+  bot_management: DataDome
+  observability: Datadog (traceparent / x-datadog-* headers)
+  source: >-
+    Vendor stack corroborated by the MACH Alliance and Elastic Path published case studies
+    on Serena & Lily, and confirmed by response headers and asset hosts observed live.

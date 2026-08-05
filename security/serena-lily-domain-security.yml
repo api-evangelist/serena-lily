@@ -1,0 +1,54 @@
+generated: '2026-08-05'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml hosts (probe-domain-security.py, plus manual
+  header verification because the marketing host answers a DataDome bot challenge)
+hosts:
+- host: www.serenaandlily.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 21 03:51:37 2026 GMT
+  hsts: true
+  hsts_max_age: 63072000
+  hsts_include_subdomains: false
+  hsts_preload: false
+  x_frame_options: DENY
+  server: Vercel
+  note: >-
+    HTTP 403 (DataDome bot challenge) is returned to non-browser clients for HTML routes,
+    so the automated probe recorded hsts as null. The header was verified directly on both
+    the 403 root response and a 404 route response — strict-transport-security is present
+    with max-age=63072000.
+- host: api.serenaandlily.com
+  https: true
+  reachable: true
+  note: >-
+    Amazon API Gateway. Every path probed returns HTTP 403 {"message":"Missing
+    Authentication Token"}; no anonymous surface.
+domains:
+- domain: serenaandlily.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+findings:
+- id: hsts-present
+  status: pass
+  detail: strict-transport-security max-age=63072000 (2 years) on www.serenaandlily.com.
+- id: dmarc-enforcing
+  status: pass
+  detail: _dmarc.serenaandlily.com publishes "v=DMARC1; p=reject;" — full enforcement.
+- id: tls-modern
+  status: pass
+  detail: TLSv1.3 negotiated.
+- id: dnssec-absent
+  status: fail
+  detail: No DS record published for serenaandlily.com; the zone is not DNSSEC signed.
+- id: caa-absent
+  status: fail
+  detail: No CAA record published; any CA may issue for serenaandlily.com.
+- id: hsts-no-subdomains
+  status: warn
+  detail: >-
+    HSTS does not assert includeSubDomains, so api.serenaandlily.com and other subdomains
+    are not covered by the policy, and the domain is not preload-eligible.

@@ -1,7 +1,18 @@
 aid: serena-lily
 name: Serena & Lily
-description: 'Serena & Lily is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Serena & Lily is a California home furnishings and lifestyle brand founded in 2003 in
+  Sausalito by textile designer Serena Dugan and entrepreneur Lily Kanter. It sells
+  furniture, custom upholstery, bedding, rugs, lighting, wallpaper, art and home decor
+  direct to consumers through its e-commerce site, a printed catalog, and a network of
+  physical Design Shops, alongside a Designer Circle trade program for interior designers.
+  The storefront runs on a headless, composable commerce stack — Elastic Path for commerce
+  and Amplience for content, served from a Vercel-hosted front end in front of AWS AppSync
+  and Amazon API Gateway — but Serena & Lily publishes no developer program, no public API
+  documentation, and no machine-readable specification of any kind. The GraphQL endpoint
+  backing the storefront answers anonymous requests with introspection disabled, and the
+  api.serenaandlily.com gateway rejects every unauthenticated path.
+image: https://cdn.media.amplience.net/s/serenaandlily/SVG_Logo_Footer
 url: https://raw.githubusercontent.com/api-evangelist/serena-lily/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
@@ -12,6 +23,13 @@ created: '2026-08-05'
 modified: '2026-08-05'
 tags:
 - Company
+- Retail
+- E-Commerce
+- Home Furnishings
+- Furniture
+- Interior Design
+- Home Decor
+- Direct to Consumer
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -20,4 +38,74 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
+  url: https://www.serenaandlily.com/
+- type: About
+  url: https://www.serenaandlily.com/about-us
+- type: HelpCenter
+  url: https://www.serenaandlily.com/help-center
+- type: Support
+  url: https://www.serenaandlily.com/contact-us
+- type: SignUp
+  url: https://www.serenaandlily.com/createaccount
+- type: TermsOfService
+  url: https://www.serenaandlily.com/CS-termsconditions
+- type: PrivacyPolicy
+  url: https://www.serenaandlily.com/privacy-policy
+- type: GitHubOrganization
+  url: https://github.com/serenaandlily
+- type: Careers
+  url: https://www.serenaandlily.com/careers
+- type: Press
+  url: https://www.serenaandlily.com/press
+- type: Accessibility
+  url: https://www.serenaandlily.com/accessibility
+- type: Locations
+  url: https://www.serenaandlily.com/stores
+- type: Partners
+  url: https://www.serenaandlily.com/trade
+- type: Twitter
+  url: https://twitter.com/serenaandlily
+- type: Facebook
+  url: https://www.facebook.com/serenaandlily
+- type: Instagram
+  url: https://www.instagram.com/serenaandlily/
+- type: Pinterest
+  url: https://www.pinterest.com/serenaandlily/
+- type: DomainSecurity
+  url: security/serena-lily-domain-security.yml
+- type: ContractDiscovery
+  url: well-known/serena-lily-contract-discovery.yml
+- type: SecondaryMarket
   url: https://forgeglobal.com/serena-lily_stock/
+
+x-coverage:
+  state: none
+  reason: no-developer-program
+  detail: >-
+    Serena & Lily runs real API infrastructure for its own storefront — an AWS AppSync
+    GraphQL endpoint at /graphql that answers anonymous queries but has introspection
+    deliberately disabled, and an api.serenaandlily.com API Gateway that returns "Missing
+    Authentication Token" on every path — yet it operates no developer program at all: no
+    developer subdomain resolves, both agent-card paths return a clean 404, the only public
+    repo in its GitHub org is a fork of an Amplience CMS extension, and no OpenAPI, SDL,
+    SDK or llms.txt is published anywhere.
+  evidence:
+  - url: https://www.serenaandlily.com/graphql
+    status: 200
+  - url: https://api.serenaandlily.com/openapi.json
+    status: 403
+  - url: https://www.serenaandlily.com/openapi.json
+    status: 404
+  - url: https://www.serenaandlily.com/.well-known/agent-card.json
+    status: 404
+  - url: https://www.serenaandlily.com/.well-known/agent.json
+    status: 404
+  - url: https://github.com/serenaandlily
+    status: 200
+  checked: '2026-08-05'
+
+x-enrichment:
+  date: '2026-08-05'
+  status: minimal
+  artifacts_added: 2
+  pass: local-v1
