@@ -12,6 +12,17 @@ description: >-
   documentation, and no machine-readable specification of any kind. The GraphQL endpoint
   backing the storefront answers anonymous requests with introspection disabled, and the
   api.serenaandlily.com gateway rejects every unauthenticated path.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://cdn.media.amplience.net/s/serenaandlily/SVG_Logo_Footer
 url: https://raw.githubusercontent.com/api-evangelist/serena-lily/refs/heads/main/apis.yml
 x-type: company
