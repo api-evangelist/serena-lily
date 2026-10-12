@@ -1,0 +1,16 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/serena-lily/integrations
+- https://n8n.io/integrations/serena-lily/
+- https://composio.dev/toolkits/serena-lily
+- https://monid.ai/tools/serena-lily
+checked:
+- https://composio.dev/toolkits/serena-lily
+- https://monid.ai/tools/serena-lily
+- https://n8n.io/integrations/serena-lily/
+- https://zapier.com/apps/serena-lily/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
